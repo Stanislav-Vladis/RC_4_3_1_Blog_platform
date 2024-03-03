@@ -1,0 +1,22 @@
+@import './fonts';
+@import './libs/settings';
+@import './libs/set';
+
+@import './ui';
+@import './components/Article';
+@import './components/Input';
+@import './components/Form';
+
+.content {
+	margin-top: 5rem;
+	&__inner {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		gap: 3.5rem;
+	}
+}
+
+main {
+	padding: 10rem 0;
+}

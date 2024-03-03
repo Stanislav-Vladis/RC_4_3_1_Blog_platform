@@ -1,0 +1,43 @@
+.not-found {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.5rem;
+	width: 100%;
+	height: 70vh;
+	&__inner {
+		height: 100%;
+		display: flex;
+		padding: 6rem 4.3rem;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		gap: 2.8rem;
+
+		border-radius: 0.8rem;
+		border: 0.13rem solid #d9d9d9;
+		background: #fff;
+		box-shadow:
+			0px 0.0812rem 0.3911rem 0rem rgba(0, 0, 0, 0.02),
+			0rem 0.1951rem 0.9399rem 0rem rgba(0, 0, 0, 0.03),
+			0rem 0.3673rem 1.7697rem 0rem rgba(0, 0, 0, 0.04),
+			0rem 0.6552rem 3.1569rem 0rem rgba(0, 0, 0, 0.04),
+			0rem 1.2255rem 5.9046rem 0rem rgba(0, 0, 0, 0.05),
+			0rem 2.9333rem 14.1333rem 0rem rgba(0, 0, 0, 0.07);
+
+		h1 {
+			margin: 0;
+		}
+
+		p {
+			margin: 0;
+		}
+
+		a {
+			text-decoration: none;
+		}
+	}
+}

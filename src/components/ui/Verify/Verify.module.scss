@@ -1,0 +1,16 @@
+.loading {
+	display: flex;
+	justify-content: center;
+	margin: 20rem 0;
+
+	:global {
+		.ant-spin-dot.ant-spin-dot-spin {
+			font-size: 8rem;
+
+			.ant-spin-dot-item {
+				width: 4rem;
+				height: 4rem;
+			}
+		}
+	}
+}
