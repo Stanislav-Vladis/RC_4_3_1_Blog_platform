@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import { logOutUser } from '../../redux/slices/user.slice';
 import defaultAvatar from '../../assets/default-avatar.jpg';
@@ -7,6 +8,7 @@ import defaultAvatar from '../../assets/default-avatar.jpg';
 import style from './Header.module.scss';
 
 const HeaderIsAuth = ({ username, image }) => {
+	const [avatar, setAvatar] = useState(image);
 	const dispatch = useDispatch();
 
 	const handleLogOut = () => {
@@ -15,7 +17,12 @@ const HeaderIsAuth = ({ username, image }) => {
 		const savedUser = JSON.parse(localStorage.getItem('user'));
 		if (Object.keys(savedUser).length !== 0) {
 			localStorage.setItem('user', JSON.stringify({}));
+			localStorage.setItem('isAuth', JSON.stringify(true));
 		}
+	};
+
+	const handleAvatarError = () => {
+		setAvatar(defaultAvatar);
 	};
 
 	return (
@@ -26,7 +33,7 @@ const HeaderIsAuth = ({ username, image }) => {
 			<Link to='/profile' className={style['header__author']}>
 				<p>{username}</p>
 				<div className={style['header__author-img']}>
-					<img src={image || defaultAvatar} alt='avatar' />
+					<img src={avatar || defaultAvatar} onError={handleAvatarError} alt='avatar' />
 				</div>
 			</Link>
 			<button className='log-out-btn' onClick={handleLogOut}>

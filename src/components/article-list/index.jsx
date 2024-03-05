@@ -9,7 +9,7 @@ const ArticleList = () => {
 	const { items } = useSelector(state => state.articlesList);
 	const { status, errors } = useSelector(state => state.server);
 
-	const articles = items.map((el, id) => <Article key={`${id}__${el.slug}`} {...el} />);
+	const articles = items.map(el => <Article key={`${el.slug}`} {...el} />);
 
 	return (
 		<Verify status={status} errors={errors}>

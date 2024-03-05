@@ -8,6 +8,10 @@ import { setArticleDetail, setCurrentSlug, setDeleteArticle } from '../redux/sli
 import { setUser } from '../redux/slices/user.slice';
 
 const API_BASE = 'https://blog.kata.academy/api';
+const USER_PATH = 'user';
+const USERS_PATH = 'users';
+const ARTICLES_PATH = 'articles';
+const FAVORITE_PATH = 'favorite';
 
 const fetchData = props => async dispatch => {
 	const { action, option } = props;
@@ -38,7 +42,11 @@ export const fetchArticlesList = body => async (dispatch, getState) => {
 	dispatch(
 		fetchData({
 			action: async () => {
-				const { data } = await axios.get(`${API_BASE}/articles?offset=${offset}&limit=${body.pageSize}`, {
+				const url = new URL(`${API_BASE}/${ARTICLES_PATH}`);
+				url.searchParams.append('offset', offset);
+				url.searchParams.append('limit', body.pageSize);
+
+				const { data } = await axios.get(url, {
 					headers: {
 						Authorization: API_KEY,
 					},
@@ -58,7 +66,7 @@ export const fetchArticleDetail = slug => async (dispatch, getState) => {
 	dispatch(
 		fetchData({
 			action: async () => {
-				const { data } = await axios.get(`${API_BASE}/articles/${slug}`, {
+				const { data } = await axios.get(`${API_BASE}/${ARTICLES_PATH}/${slug}`, {
 					headers: {
 						Authorization: API_KEY,
 					},
@@ -78,7 +86,7 @@ export const fetchArticleNew = body => async (dispatch, getState) => {
 		fetchData({
 			action: async () => {
 				const { data } = await axios.post(
-					`${API_BASE}/articles`,
+					`${API_BASE}/${ARTICLES_PATH}`,
 					{
 						article: { ...body },
 					},
@@ -105,7 +113,7 @@ export const fetchArticleUpdate = prop => async (dispatch, getState) => {
 		fetchData({
 			action: async () => {
 				const response = await axios.put(
-					`${API_BASE}/articles/${slug}`,
+					`${API_BASE}/${ARTICLES_PATH}/${slug}`,
 					{
 						article: { ...data },
 					},
@@ -129,7 +137,7 @@ export const fetchArticleDelete = slug => async (dispatch, getState) => {
 	dispatch(
 		fetchData({
 			action: async () => {
-				await axios.delete(`${API_BASE}/articles/${slug}`, {
+				await axios.delete(`${API_BASE}/${ARTICLES_PATH}/${slug}`, {
 					headers: {
 						Authorization: API_KEY,
 					},
@@ -167,7 +175,7 @@ export const fetchSignUpUser = body => async dispatch => {
 			action: async () => {
 				await axios({
 					method: 'post',
-					url: `${API_BASE}/users`,
+					url: `${API_BASE}/${USERS_PATH}`,
 					headers: {},
 					data: {
 						user: {
@@ -190,7 +198,7 @@ export const fetchUpdateUser = body => async (dispatch, getState) => {
 		fetchData({
 			action: async () => {
 				await axios.put(
-					`${API_BASE}/user`,
+					`${API_BASE}/${USER_PATH}`,
 					{
 						user: { ...body },
 					},
@@ -201,13 +209,14 @@ export const fetchUpdateUser = body => async (dispatch, getState) => {
 					}
 				);
 
-				const user = await axios.get(`${API_BASE}/user`, {
+				const user = await axios.get(`${API_BASE}/${USER_PATH}`, {
 					headers: {
 						Authorization: API_KEY,
 					},
 				});
 
 				localStorage.setItem('user', JSON.stringify(user.data.user.token));
+				localStorage.setItem('isAuth', JSON.stringify(true));
 				return user.data.user;
 			},
 			option: setUser,
@@ -223,7 +232,7 @@ export const fetchAddLike = slug => async (dispatch, getState) => {
 		fetchData({
 			action: async () => {
 				const res = await axios.post(
-					`${API_BASE}/articles/${slug}/favorite`,
+					`${API_BASE}/${ARTICLES_PATH}/${slug}/${FAVORITE_PATH}`,
 					{},
 					{
 						headers: {
@@ -245,7 +254,7 @@ export const fetchDeleteLike = slug => async (dispatch, getState) => {
 	dispatch(
 		fetchData({
 			action: async () => {
-				const res = await axios.delete(`${API_BASE}/articles/${slug}/favorite`, {
+				const res = await axios.delete(`${API_BASE}/${ARTICLES_PATH}/${slug}/${FAVORITE_PATH}`, {
 					headers: {
 						Authorization: API_KEY,
 					},
@@ -262,7 +271,7 @@ export const fetchCurrentUser = token => async dispatch => {
 	dispatch(
 		fetchData({
 			action: async () => {
-				const res = await axios.get(`${API_BASE}/user`, {
+				const res = await axios.get(`${API_BASE}/${USER_PATH}`, {
 					headers: {
 						Authorization: `Token ${token}`,
 					},

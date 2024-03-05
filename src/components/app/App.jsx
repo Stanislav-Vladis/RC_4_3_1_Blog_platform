@@ -22,6 +22,7 @@ const App = () => {
 	useEffect(() => {
 		if (!localStorage.getItem('user')) {
 			localStorage.setItem('user', JSON.stringify({}));
+			localStorage.setItem('isAuth', JSON.stringify(false));
 		} else {
 			const currentToken = JSON.parse(localStorage.getItem('user'));
 			Object.keys(currentToken).length !== 0 ? dispatch(fetchCurrentUser(currentToken)) : null;
@@ -32,6 +33,7 @@ const App = () => {
 		const currentUser = JSON.parse(localStorage.getItem('user'));
 		if (Object.keys(currentUser).length === 0 && user.token) {
 			localStorage.setItem('user', JSON.stringify(user.token));
+			localStorage.setItem('isAuth', JSON.stringify(true));
 		}
 	}, [user]);
 

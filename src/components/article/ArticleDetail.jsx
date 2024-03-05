@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Markdown from 'markdown-to-jsx';
 import { useNavigate } from 'react-router-dom';
 import { Button, Popconfirm } from 'antd';
@@ -10,6 +10,7 @@ import { setDeleteArticle, setEditArticle, setUserArticle } from '../../redux/sl
 import { fetchAddLike, fetchArticleDelete, fetchDeleteLike } from '../../services/fetchData';
 
 const ArticleDetail = props => {
+	const [avatar, setAvatar] = useState(props.author.image);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -38,6 +39,10 @@ const ArticleDetail = props => {
 
 	const handleDelete = () => {
 		dispatch(fetchArticleDelete(slug));
+	};
+
+	const handleAvatarError = () => {
+		setAvatar(defaultAvatar);
 	};
 
 	const handleLike = () => {
@@ -94,7 +99,7 @@ const ArticleDetail = props => {
 							<div className='article__date'>{format(new Date(props.createdAt), 'MMMM d, yyyy')}</div>
 						</div>
 						<div className='article__author-image'>
-							<img src={props.author.image || defaultAvatar} alt='avatar' />
+							<img src={avatar || defaultAvatar} onError={handleAvatarError} alt='avatar' />
 						</div>
 					</div>
 				</div>

@@ -1,20 +1,26 @@
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
 import defaultAvatar from '../../assets/default-avatar.jpg';
 import { fetchAddLike, fetchDeleteLike } from '../../services/fetchData';
 
-const Article = props => {
+const Article = ({ author, favoritesCount, favorited, slug, title, tagList, description, createdAt }) => {
+	const [avatar, setAvatar] = useState(author.image);
 	const { isAuth } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	const handleLike = () => {
-		if (props.favorited) {
-			dispatch(fetchDeleteLike(props.slug));
+		if (favorited) {
+			dispatch(fetchDeleteLike(slug));
 		} else {
-			dispatch(fetchAddLike(props.slug));
+			dispatch(fetchAddLike(slug));
 		}
+	};
+
+	const handleAvatarError = () => {
+		setAvatar(defaultAvatar);
 	};
 
 	return (
@@ -22,11 +28,11 @@ const Article = props => {
 			<div className='article__inner'>
 				<div className='article__content'>
 					<div className='article__header'>
-						<h3 className='article__title' title={props.title}>
-							<Link to={`/articles/${props.slug}`}>{props.title}</Link>
+						<h3 className='article__title' title={title}>
+							<Link to={`/articles/${slug}`}>{title}</Link>
 						</h3>
 						<button
-							className={`${props.favorited ? 'article__like active' : 'article__like'}`}
+							className={`${favorited ? 'article__like active' : 'article__like'}`}
 							disabled={!isAuth}
 							onClick={handleLike}
 						>
@@ -44,25 +50,25 @@ const Article = props => {
 									/>
 								</svg>
 							</span>
-							<strong>{props.favoritesCount}</strong>
+							<strong>{favoritesCount}</strong>
 						</button>
 					</div>
 					<ul className='article__tags'>
-						{props.tagList.map((tag, id) => (
+						{tagList.map((tag, id) => (
 							<li className='tag' key={`${id}__${tag}`} title={tag}>
 								{tag}
 							</li>
 						))}
 					</ul>
-					<div className='article__description'>{props.description || ''}</div>
+					<div className='article__description'>{description || ''}</div>
 				</div>
 				<div className='article__author'>
 					<div className='article__author-info'>
-						<div className='article__author-name'>{props.author.username || ''}</div>
-						<div className='article__date'>{format(new Date(props.createdAt), 'MMMM d, yyyy')}</div>
+						<div className='article__author-name'>{author.username || ''}</div>
+						<div className='article__date'>{format(new Date(createdAt), 'MMMM d, yyyy')}</div>
 					</div>
 					<div className='article__author-image'>
-						<img src={props.author.image || defaultAvatar} alt='avatar' />
+						<img src={avatar || defaultAvatar} onError={handleAvatarError} alt='avatar' />
 					</div>
 				</div>
 			</div>

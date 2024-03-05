@@ -8,6 +8,7 @@ import style from './Header.module.scss';
 const Header = () => {
 	const { user, isAuth } = useSelector(state => state.user);
 	console.log(user);
+	console.log(isAuth);
 	return (
 		<header className={style.header}>
 			<div className={style['header__inner']}>
